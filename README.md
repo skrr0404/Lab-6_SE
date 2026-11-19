@@ -40,3 +40,17 @@ coverage report -m
 The 17 tests in `CodeCoverageTest_museum_admission.py` execute every statement once: both `raise` lines in each function, the free entry for under-5s, the Monday and weekend price changes, both guided-tour fees, every discount tier and all three gallery results.
 
 ![Code coverage](screenshots/code_coverage_report.png)
+
+## Branch coverage – 100%
+
+The 43 tests in `BranchCoverageTest_museum_admission.py` (including parametrized cases) make each of the 14 decisions evaluate both **True and False** (28 branches). They also test the boundary value on each side of every comparison:
+
+| Function | Decisions covered both ways | Boundary values tested |
+|---|---|---|
+| `ticket_price` | invalid category, `age < 0`, `age < 5`, Monday, weekend, guided tour, student-on-tour | age −1 / 0 / 4 / 5, every day type, case-sensitive "Monday"/"Adult" |
+| `group_discount` | `size < 1`, school group, school `>= 20`, public `>= 15`, public `>= 8` | 0 / 1, 19 / 20, 14 / 15, 7 / 8 |
+| `gallery_entry` | full (`>= capacity`), 90%-full **and** no timed slot | 89 / 90 / 100 / 120 of 100, 90% full with and without a slot, capacity 10 |
+
+**Why branch coverage matters here:** `gallery_entry(90, 100, True)` and `gallery_entry(89, 100, False)` both reach the same `return "enter"` line. Line coverage counts that line as covered after either one, but only branch coverage checks that the queue condition was actually tested as False for both reasons (has a timed slot / below 90%).
+
+![Branch coverage](screenshots/branch_coverage_report.png)
